@@ -4,8 +4,73 @@
         Script of the day week 7 number 2
     </title>
     <body>
-
     </body>
     <script>
+        let deckOfCards = []
+        let currentHand = []
+        function cardClass(rank,suite){
+            this.rank = rank
+            this.suite = suite
+            this. isVisable = false
+            this.isDealt = false
+            this.deal = function(){
+                this.isDealt = true
+            }
+            this.show = function(){
+                this.isVisable = true
+            }
+            this.hide = function(){
+                this.isVisable = false
+            }
+        }
+        // pushes deck of playing cards into deck of cards variable
+        function makeDeck(){
+            let suites = ["hearts","spades","clubs","diamonds"]
+            let ranks = ["2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"]
+            for(i in suites){
+                for(r in ranks){
+                    let card = new cardClass(ranks[r], suites[i])
+                    deckOfCards.push(card)
+                }
+            }
+            dealCards()
+        }
+        // gernates a randum number between 0 and 52
+        // if their are less than 3 cards in currenHand, the loop will continue
+        // if the random card chosen hasn't been dealt then the card is considered dealt and added to your current hand
+        function dealCards(){
+            while(currentHand.length <= 2){
+                let randomNum = Math.floor(Math.random() * 52)
+                let randomCard = deckOfCards[randomNum]
+                if(randomCard.isDealt != true){
+                    randomCard.deal()
+                    currentHand.push(randomCard)
+                }
+            }
+            updateIsViable()
+            writeToDom()
+        }
+        // updates the visable properties of the cards in your hand
+        function updateIsViable(){
+            for(card in currentHand){
+                currentHand[card].show()
+            }
+        }
+        // generates the messages being written to the dom.
+        // their should be a comma after each card besides the last one
+        // the last card should have a period after it 
+        function writeToDom(){
+            let message = `you have been dealt the `
+            for(card in currentHand){
+                message = message + ` ${currentHand[card].rank} of ${currentHand[card].suite}`
+                if (card == 0 || card == 1){
+                    message = message + ','
+                }else {
+                    message = message + '.'
+                }
+            }
+            document.write(`<p> ${message}</p>`)
+        }
+        makeDeck()
     </script>
 </html>
